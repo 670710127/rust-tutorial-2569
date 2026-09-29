@@ -222,47 +222,129 @@ break 10;
 
 > **ข้อกำหนด:** Code ทุกตัวต้อง Compile และ Run ได้จริงก่อนนำมาใส่ในเอกสาร
 
-### Example 1 — `[ชื่อ Example]`
+### Example 1 — `การคำนวณเกรดด้วย Block Expression`
 
-**Purpose:** `[ต้องการสาธิตอะไร]`
+**Purpose:** `สาธิตการใช้ Block Expression ในการคืนค่า (Return Value) เข้าสู่ตัวแปรโดยตรงโดยไม่ต้องใช้คำสั่ง return และแสดงความแตกต่างระหว่างการลงท้ายด้วย Expression (ไม่มี ;) กับ Statement (มี ;)`
 
 ```rust
 fn main() {
-    // Write your runnable Rust code here
+    let score = 85;
+
+    // Block Expression: คืนค่า String slice เข้าตัวแปร grade โดยตรง
+    let grade = {
+        let bonus = 5;
+        let total_score = score + bonus;
+
+        // ไม่ใส่ Semicolon (;) เพื่อให้เป็น Expression คืนค่าออกไป
+        if total_score >= 80 {
+            "A"
+        } else if total_score >= 70 {
+            "B"
+        } else {
+            "F"
+        }
+    };
+
+    println!("Total calculated grade: {}", grade);
 }
 ```
 
 **Expected Output**
 
 ```text
-[expected output]
+Total calculated grade: A
 ```
 
 **Explanation**
 
-`[อธิบาย code ทีละส่วนที่สำคัญ]`
+```
+1. let score = 85; เป็น Statement (Declaration Statement) สำหรับประกาศตัวแปร
+2. let grade = { ... }; เป็นการนำ Block Expression มากำหนดค่าให้ตัวแปร grade
+3. ตัวแปร bonus และ total_score เป็น Local Variables ที่อยู่ภายใน Block Scope เท่านั้น ไม่สามารถเรียกใช้นอก {} ได้
+4. บรรทัดสุดท้ายภายใน Block (if total_score >= 80 { ... }) ไม่มี Semicolon ; ทำให้ทำหน้าที่เป็น Expression ที่ถูกประเมินค่าและคืนค่าเป็น &str ออกมาให้กับตัวแปร grade
+```
 
 ---
 
-### Example 2 — `[ชื่อ Example]`
+### Example 2 — `การคืนค่าด้วย match Expression และคำสั่ง return`
 
-**Purpose:** `[ต้องการสาธิตอะไร]`
+**Purpose:** `สาธิตการใช้ match ในฐานะ Expression เพื่อประเมินค่าผลลัพธ์ (Value) รวมถึงการใช้คำสั่ง return สำหรับการออกจากฟังก์ชันล่วงหน้า (Early Return) เมื่อเจอเงื่อนไขขอบเขต`
 
 ```rust
+fn check_user_role(level: u32) -> &'static str {
+    // Early Return: ใช้คำสั่ง return เพื่อคืนค่าและออกจากฟังก์ชันทันที
+    if level == 0 {
+        return "Guest";
+    }
+
+    // match ในฐานะ Expression: คืนค่า String slice ออกจากฟังก์ชันโดยไม่ต้องใช้คำสั่ง return
+    match level {
+        1 => "Member",
+        2 => "Moderator",
+        3 => "Admin",
+        _ => "Unknown Role",
+    }
+}
+
 fn main() {
-    // Write your runnable Rust code here
+    let user_level = 2;
+    let role = check_user_role(user_level);
+
+    println!("User role is: {}", role);
 }
 ```
 
 **Expected Output**
 
 ```text
-[expected output]
+User role is: Moderator
 ```
 
 **Explanation**
 
-`[อธิบาย code]`
+```
+1. คำสั่ง return (Explicit Return): บรรทัด return "Guest"; ใช้สำหรับหยุดการทำงานและส่งค่าออกจากฟังก์ชันทันทีก่อนจะไปถึงโค้ดส่วนอื่น (Early Return)  
+2. match ในฐานะ Expression: โครงสร้าง match ทำหน้าที่ประเมินค่าและส่งผลลัพธ์จาก Arm ที่จับคู่สำเร็จออกมาเป็น Value เพื่อคืนค่าออกจากฟังก์ชันโดยตรง 
+3. การละเว้น Semicolon ;: ท้ายโครงสร้าง match ไม่มีการใส่ ; เพื่อให้ผลลัพธ์ประเมินค่าเป็น Expression สำหรับคืนค่าให้ฟังก์ชัน check_user_role   
+```
+
+---
+
+### Example 3 — `การคืนค่าจาก Loop ด้วยคำสั่ง break`
+
+**Purpose:** `สาธิตการใช้ loop ในฐานะ Expression ที่สามารถประมวลผลการทำงานซ้ำ และคืนค่าผลลัพธ์กลับมาเข้าตัวแปรได้ทันทีผ่านคำสั่ง break value;`
+
+```rust
+fn main() {
+    let mut counter = 0;
+
+    // loop เป็น Expression ที่ส่งค่ากลับมาเข้าตัวแปร result ได้โดยตรง
+    let result = loop {
+        counter += 1;
+
+        if counter == 3 {
+            // คืนค่า counter * 10 ออกไปให้ตัวแปร result แล้วหยุด loop ทันที
+            break counter * 10;
+        }
+    };
+
+    println!("The result from loop execution is: {}", result);
+}
+```
+
+**Expected Output**
+
+```text
+The result from loop execution is: 30
+```
+
+**Explanation**
+
+```
+1. ในภาษา Rust โครงสร้างควบคุมอย่าง loop ถือเป็น Expression ไม่ใช่แค่ Statement เหมือนภาษา C หรือ Java     
+2. การใส่ค่าไว้หลังคำสั่ง break (เช่น break counter * 10;) เป็นการส่งผลลัพธ์ออกจาก Loop มายังตัวแปรที่รับค่าทันที 
+3. ช่วยให้เขียนโค้ดกระชับขึ้น เพราะตัวแปร result จะได้รับค่าประมวลผลทันที โดยไม่ต้องสร้างตัวแปร mut เปล่าๆ ไว้นอก Loop ก่อน   
+```
 
 ---
 
