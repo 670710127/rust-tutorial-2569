@@ -71,8 +71,11 @@ Rust มี Statement หลัก ๆ 2 กลุ่ม:
 ตัวอย่าง Expression Statement:
 
 ```rust
-let mut v = vec![1, 2, 3];
-v.pop();
+fn main() {
+    let mut v = vec![1, 2, 3];
+    v.pop();
+    println!("{:?}", v);
+}
 ```
 
 `v.pop()` นำสมาชิกตัวท้ายออกจาก vector และคืนค่ากลับมา แต่ในตัวอย่างนี้ค่าที่คืนมาจะไม่ถูกนำไปใช้ต่อ
