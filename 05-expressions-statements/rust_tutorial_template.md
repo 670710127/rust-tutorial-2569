@@ -268,51 +268,68 @@ fn main() {
 
 ## 7. Common Mistakes
 
-### Mistake 1 — `[ชื่อข้อผิดพลาด]`
+### Mistake 1 — `ใส่ Semicolon หลัง Expression สุดท้าย`
 
 **Problem**
 
-`[อธิบายปัญหา]`
+`การใส่ `;` หลัง expression สุดท้ายของ block โดยไม่ตั้งใจ จะทำให้ block นั้นไม่คืนค่าที่ต้องการ แต่จะมีค่าเป็น `()` แทน`
 
 **Incorrect Code**
 
 ```rust
-// Incorrect example
+let x = {
+    5 + 3;
+};
 ```
 
 **Correct Code**
 
 ```rust
-// Correct example
+let x = {
+    5 + 3
+};
 ```
 
 **Why?**
 
-`[อธิบายสาเหตุ]`
+`Rust ใช้ expression สุดท้ายของ block เป็นค่าที่ส่งออกจาก block ได้ แต่ expression นั้นต้องไม่มี `;` ต่อท้าย เพราะถ้ามี `;` Rust จะมองเป็น statement และ block จะมีค่าเป็น `()` แทน`
+`() เป็นชนิดข้อมูลที่ใช้แทนกรณีที่ “ไม่มีค่าข้อมูลที่มีความหมายให้ส่งกลับ”`
 
 ---
 
-### Mistake 2 — `[ชื่อข้อผิดพลาด]`
+### Mistake 2 — `ให้ค่าจาก if แต่ละ branch เป็นคนละชนิด`
 
 **Problem**
 
-`[อธิบายปัญหา]`
+`เมื่อใช้ if เป็น expression ค่าที่ได้จากแต่ละ branch ต้องมีชนิดข้อมูลที่เข้ากันได้`
 
 **Incorrect Code**
 
 ```rust
-// Incorrect example
+let condition = true;
+
+let result = if condition {
+    10
+} else {
+    "ten"
+};
 ```
 
 **Correct Code**
 
 ```rust
-// Correct example
+let condition = true;
+
+let result = if condition {
+    10
+} else {
+    20
+};
 ```
 
 **Why?**
 
-`[อธิบายสาเหตุ]`
+`Rust สามารถใช้ if เป็น expression เพื่อสร้างค่าได้ แต่ค่าที่ได้จาก if ต้องมี type เดียวกัน`
 
 ---
 
