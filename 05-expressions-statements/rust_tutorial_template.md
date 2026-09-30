@@ -337,47 +337,85 @@ let result = if condition {
 
 > จัดทำแบบฝึกหัด **2 ข้อ** ที่สอดคล้องกับ Topic และมีระดับความยากเหมาะสม
 
-### Exercise 1 — `[ชื่อโจทย์]`
+### Exercise 1 — `Statement หรือ Expression`
 
 **Problem**
 
-`[เขียนโจทย์]`
+`จงระบุว่าแต่ละบรรทัดเป็น Statement หรือ Expression`
+
+```rust
+let x = 10;
+x + 5
+x + 5;
+if x > 5 { 1 } else { 0 }
+```
 
 **Hint**
 
-`[คำใบ้]`
+`Expression สร้างค่า ส่วน statement ใช้ทำงานบางอย่างและมักจบด้วย ;`
 
 **Solution**
 
 ```rust
-// Solution code
+let x = 10;                  -> Statement
+x + 5                       -> Expression
+x + 5;                      -> Expression ที่ถูกใช้เป็น statement
+if x > 5 { 1 } else { 0 }   -> Expression
 ```
 
 **Explanation**
 
-`[อธิบายแนวทางแก้]`
+`ใน Rust expression คือโค้ดที่ให้ค่าออกมา เช่น `x + 5` หรือ `if ... { ... } else { ... }``
+
+`ส่วน statement คือคำสั่งที่ใช้ทำงานบางอย่าง เช่น `let x = 10;``
+
+`เมื่อเติม `;` หลัง expression เช่น `x + 5;` ค่าที่ได้จาก expression จะไม่ถูกนำไปใช้ต่อ และ expression นั้นจะถูกใช้ในรูปของ statement`
 
 ---
 
-### Exercise 2 — `[ชื่อโจทย์]`
+### Exercise 2 — `[ใช้ if Expression เพื่อสร้างค่า]`
 
 **Problem**
 
-`[เขียนโจทย์]`
+จงเติมโค้ดให้ตัวแปร `grade` มีค่าเป็น
+
+- `"A"` เมื่อ `score >= 80`
+- `"B"` เมื่อ `score >= 70`
+- `"C"` ในกรณีอื่น
+
+```rust
+let score = 75;
+
+let grade = ??????????;
+
+
+
+println!("{}", grade);
+```
 
 **Hint**
 
-`[คำใบ้]`
+`Rust สามารถใช้ if และ else if เป็น expression เพื่อสร้างค่าได้`
 
 **Solution**
 
 ```rust
-// Solution code
+let score = 75;
+
+let grade = if score >= 80 {
+    "A"
+} else if score >= 70 {
+    "B"
+} else {
+    "C"
+};
+
+println!("{}", grade);
 ```
 
 **Explanation**
 
-`[อธิบายแนวทางแก้]`
+`Rust สามารถใช้ if เป็น expression ได้ โดยค่าจาก branch ที่ตรงกับเงื่อนไขจะกลายเป็นค่าของ expression และถูกนำไปเก็บใน grade เมื่อ score = 75 เงื่อนไข score >= 70 เป็นจริง จึงได้ค่า "B"`
 
 ---
 
