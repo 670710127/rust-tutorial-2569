@@ -11,10 +11,10 @@
 
 | # | Name | Student ID | GitHub Username | Main Responsibility |
 |---|---|---|---|---|
-| 1 | `คมสัน กลิ่นหอม` | `670710124` | `@670710124` | Concept + Code |
-| 2 | `[ชื่อ-นามสกุล]` | `[รหัส]` | `@[username]` | Code + Demo |
-| 3 | `[ชื่อ-นามสกุล]` | `[รหัส]` | `@[username]` | Rust vs Other Language + PPL |
-| 4 | `ณัฐพงศ์` | `670710127` | `@670710127` | Exercises + Common Mistakes |
+| 1 | นายคมสัน กลิ่นหอม | 670710124 | `@670710124` | Concept + Short Code Illustration (สรุปแนวคิดหลัก + โค้ดตัวอย่างสั้น) |
+| 2 | นายฐิติพงศ์ ราชธานี | 670710125 | `@670710125` | Detailed Code + Live Demo (โค้ดเชิงลึก + สาธิตสด) |
+| 3 | นายณัฏฐ์ธเนศ กุนทรฐิติวัสส์ | 670710126 | `@670710126` | Rust vs Other Language + PPL Analysis (เปรียบเทียบภาษา + วิเคราะห์เชิง PPL) |
+| 4 | นายณัฐพงศ์ อวชัย | 670710127 | `@670710127` | Exercises + Common Mistakes + Challenge (แบบฝึกหัด + ข้อผิดพลาดที่พบบ่อย + คำถามท้าทาย) |
 
 ---
 
