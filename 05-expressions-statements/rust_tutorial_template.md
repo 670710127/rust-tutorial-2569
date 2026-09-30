@@ -14,7 +14,7 @@
 | 1 | `คมสัน กลิ่นหอม` | `670710124` | `@670710124` | Concept + Code |
 | 2 | `[ชื่อ-นามสกุล]` | `[รหัส]` | `@[username]` | Code + Demo |
 | 3 | `[ชื่อ-นามสกุล]` | `[รหัส]` | `@[username]` | Rust vs Other Language + PPL |
-| 4 | `[ชื่อ-นามสกุล]` | `[รหัส]` | `@[username]` | Exercises + Common Mistakes |
+| 4 | `ณัฐพงศ์` | `670710127` | `@670710127` | Exercises + Common Mistakes |
 
 ---
 
