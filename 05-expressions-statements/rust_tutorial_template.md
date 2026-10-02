@@ -617,19 +617,19 @@ println!("{}", result);
 
 **Member 1**
 
-`[สิ่งที่รับผิดชอบ]`
+Concept + Short Code Illustration
 
 **Member 2**
 
-`[สิ่งที่รับผิดชอบ]`
+Detailed Code + Live Demo 
 
 **Member 3**
 
-`[สิ่งที่รับผิดชอบ]`
+Rust vs Other Language + PPL Analysis
 
 **Member 4**
 
-`[สิ่งที่รับผิดชอบ]`
+Exercises + Common Mistakes + Challenge
 
 > สมาชิกทุกคนต้องสามารถอธิบาย Code ของกลุ่มได้ ไม่ใช่เฉพาะส่วนที่ตนเองเขียน
 
@@ -639,10 +639,15 @@ println!("{}", result);
 
 > แนะนำให้มีอย่างน้อย **4 แหล่งอ้างอิง** และควรใช้เอกสารทางการเป็นหลัก
 
-1. `[The Rust Programming Language — Rust Book]`
-2. `[Rust by Example / Rust Reference]`
-3. `[Official documentation ที่เกี่ยวข้องกับ Topic]`
-4. `[แหล่งอ้างอิงเพิ่มเติม]`
+1. [The Rust Programming Language — Statements and Expressions](https://doc.rust-lang.org/book/ch03-03-how-functions-work.html#statements-and-expressions)
+
+2. [Rust By Example — Expressions](https://doc.rust-lang.org/rust-by-example/expression.html)
+
+3. [The Rust Reference — Statements and Expressions](https://doc.rust-lang.org/reference/statements-and-expressions.html)
+
+4. [The Rust Reference — Block Expressions](https://doc.rust-lang.org/reference/expressions/block-expr.html)
+
+5. [Rust Standard Library — Unit Type `()`](https://doc.rust-lang.org/std/primitive.unit.html)
 
 ---
 
@@ -652,19 +657,18 @@ println!("{}", result);
 
 | AI Tool | Purpose | How the Result Was Verified |
 |---|---|---|
-| `[เช่น ChatGPT]` | `[ใช้เพื่ออะไร]` | `[ตรวจสอบอย่างไร]` |
-| `[AI tool]` | `[ใช้เพื่ออะไร]` | `[ตรวจสอบอย่างไร]` |
+| `ChatGPT` | `ค้นหาข้อมูล อธิบาย และสรุปหัวข้อ` | `ตรวจสอบกับเอกสารทางการของ Rust และทดลองรันโค้ด` |
 
 ### Declaration
 
-- [ ] Code ทุกส่วนที่นำเสนอได้รับการ Compile และทดสอบแล้ว
-- [ ] สมาชิกทุกคนสามารถอธิบาย Code ที่นำเสนอได้
-- [ ] ตรวจสอบข้อมูลจากแหล่งอ้างอิงที่น่าเชื่อถือแล้ว
-- [ ] ระบุการใช้ AI อย่างโปร่งใส
+- [X] Code ทุกส่วนที่นำเสนอได้รับการ Compile และทดสอบแล้ว
+- [X] สมาชิกทุกคนสามารถอธิบาย Code ที่นำเสนอได้
+- [X] ตรวจสอบข้อมูลจากแหล่งอ้างอิงที่น่าเชื่อถือแล้ว
+- [X] ระบุการใช้ AI อย่างโปร่งใส
 
 **รายละเอียดการใช้ AI**
 
-`[อธิบายว่าใช้ AI ในขั้นตอนใด และสมาชิกตรวจสอบผลลัพธ์อย่างไร]`
+ใช้ ChatGPT เพื่อช่วยค้นหา อธิบาย เปรียบเทียบ และสรุปเนื้อหาเกี่ยวกับ Expressions and Statements ใน Rust รวมถึงช่วยออกแบบตัวอย่างและแบบฝึกหัด โดยสมาชิกตรวจสอบข้อมูลกับเอกสารทางการของ Rust และทดลองรันโค้ดเพื่อยืนยันความถูกต้องก่อนนำมาใช้
 
 ---
 
@@ -681,46 +685,46 @@ println!("{}", result);
 
 **How did your team collaborate?**
 
-`[อธิบายกระบวนการทำงานร่วมกัน]`
+สมาชิกในกลุ่มร่วมกันกำหนดขอบเขตหัวข้อ จากนั้นแบ่งหน้าที่ให้แต่ละคนศึกษาภาษา Rust และเนื้อหาที่รับผิดชอบ ก่อนนำความรู้มารวมกันเป็นงานของกลุ่ม หากมีปัญหาหรือข้อสงสัย จะนำมาปรึกษาเพื่อช่วยกันตรวจสอบและแก้ไข
 
 **Problems encountered**
 
-`[ปัญหาที่พบ]`
+บางข้อมูลจาก AI จำเป็นต้องตรวจสอบเพิ่มเติมกับเอกสาร และตัวอย่างโค้ดบางส่วนต้องทดลองรันเพื่อยืนยันผลลัพธ์
 
 **How did you solve them?**
 
-`[วิธีแก้ปัญหา]`
+ตรวจสอบข้อมูลกับเอกสารทางการและทดลองรันโค้ดเพื่อยืนยันความถูกต้อง
 
 ---
 
 ## 15. Final Checklist
 
-- [ ] Learning Objectives ครบ 3–4 ข้อ
-- [ ] Key Concepts ครบถ้วน
-- [ ] Syntax / Rules
-- [ ] Runnable Code Examples
-- [ ] Code Compile และ Run ได้จริง
-- [ ] Common Mistakes
-- [ ] Exercises 2 ข้อ พร้อม Solutions
-- [ ] PPL Perspective
-- [ ] Rust vs Other Language
-- [ ] References อย่างน้อย 4 แหล่ง
-- [ ] AI Usage Declaration
-- [ ] GitHub Contribution
-- [ ] สมาชิกทั้ง 4 คนมีส่วนร่วม
-- [ ] สมาชิกทั้ง 4 คนพร้อมนำเสนอคนละ 5 นาที
-- [ ] สมาชิกทุกคนสามารถอธิบาย Code ของกลุ่มได้
+- [X] Learning Objectives ครบ 3–4 ข้อ
+- [X] Key Concepts ครบถ้วน
+- [X] Syntax / Rules
+- [X] Runnable Code Examples
+- [X] Code Compile และ Run ได้จริง
+- [X] Common Mistakes
+- [X] Exercises 2 ข้อ พร้อม Solutions
+- [X] PPL Perspective
+- [X] Rust vs Other Language
+- [X] References อย่างน้อย 4 แหล่ง
+- [X] AI Usage Declaration
+- [X] GitHub Contribution
+- [X] สมาชิกทั้ง 4 คนมีส่วนร่วม
+- [X] สมาชิกทั้ง 4 คนพร้อมนำเสนอคนละ 5 นาที
+- [X] สมาชิกทุกคนสามารถอธิบาย Code ของกลุ่มได้
 
 ---
 
 ## Submission Information
 
-**Repository:** `[GitHub repository URL]`
+**Repository:** `[[GitHub repository URL]](https://github.com/670710127/rust-tutorial-2569/tree/main)`
 
-**Chapter Path:** `[เช่น chapters/01-introduction/]`
+**Chapter Path:** `rust-tutorial-2569/05-expressions-statements`
 
 **Final PR:** `#[PR number]`
 
-**Submitted by:** `[Group XX]`
+**Submitted by:** `Group 05`
 
 **Date:** `[YYYY-MM-DD]`
