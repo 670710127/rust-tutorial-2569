@@ -269,112 +269,207 @@ fn main() {
 
 ### 9.1 Syntax
 
-Rust แยก Expression และ Statement ออกจากกัน โดย Expression สามารถสร้างค่าได้ ส่วน Statement ใช้สำหรับจัดลำดับการทำงาน และ `;` มีผลต่อรูปแบบการใช้งานของ Expression  
+Syntax คือกฎที่กำหนดว่าโครงสร้างของโปรแกรมต้องเขียนอย่างไรจึงจะถูกต้องตามภาษานั้น
+
+ใน Rust, Expression คือโครงสร้างที่สามารถประเมินผลแล้วได้ค่า (Value) ส่วน Statement คือคำสั่งที่ใช้ดำเนินการบางอย่าง โดย Rust ใช้ `{ }` เพื่อกำหนด Block และใช้ `;` เพื่อจบ Statement ในหลายกรณี
+
 ตัวอย่าง:
 ```rust
-fn main() {
-    let x = 10;  // Statement
-
-    let y = x + 5;  // x + 5 เป็น Expression
-
-    println!("{}", y);
-}
+let x = 5 + 3;
 ```
-ในตัวอย่าง `let x = 10;` เป็น Statement ส่วน `x + 5` เป็น Expression ที่สร้างค่า 15 เพื่อนำไปกำหนดให้ y
+`10 + 5` เป็น `Expression` เพราะให้ค่า 15
+`let x = ...;` เป็น `Statement`
+
+Rust มีลักษณะเด่นคือ Expression สามารถอยู่ในตำแหน่งที่ต้องการค่าได้ เช่น if สามารถใช้เป็น Expression ได้
+
+```rust
+let result = if x > 0 {
+    1
+} else {
+    -1
+};
+```
+**ดังนั้นในมุมมอง PPL Syntax ของ Rust แสดงให้เห็นว่า ภาษาออกแบบ Grammar ให้ Control Flow บางชนิดสามารถทำหน้าที่เป็น Expression ได้**
 
 ### 9.2 Semantics
 
-Block ใน Rust สามารถเป็น Expression และมีค่าของตัวเองได้ โดย Expression ตัวสุดท้ายที่ไม่มี `;` จะเป็น Tail Expression และค่าของมันจะกลายเป็นค่าของ block หากมี ; ต่อท้าย ค่าจะถูกละทิ้งและ block จะได้ค่าเป็น ()  
+Semantics คือความหมายหรือพฤติกรรมของโครงสร้างภาษาเมื่อถูกประเมินหรือทำงาน
+สำหรับ Rust:  
+`Expression` มีหน้าที่ประเมินผลและสร้าง Value  
+`Statement` มีหน้าที่ดำเนินการหรือเปลี่ยนแปลงสถานะของโปรแกรม
+
 ตัวอย่าง:
 ```rust
-fn main() {
-    let result = {
-        let a = 10;
-        let b = 20;
+let x = {
+    let a = 10;
+    a + 5
+};
+```
 
-        a + b
-    };
+การทำงานคือ
 
-    println!("{}", result);
+1. สร้าง `a` และกำหนดค่า `10 `   
+2. ประเมิน `a + 5`  
+3. ได้ค่า `15`  
+4. Block คืนค่า `15`  
+5. `x` จึงมีค่า `15`
+
+อีกจุดสำคัญคือ `;` มีผลต่อ Semantics
+```rust
+{
+    10 + 5
 }
 ```
-`a + b` เป็น Expression ตัวสุดท้ายของ block และไม่มี `;` ดังนั้นจึงเป็น Tail Expression และค่า 30 จะถูกส่งออกมาเป็นค่าของ block
+Block นี้คืนค่า `15`
+
+แต่
+```rust
+{
+    10 + 5;
+}
+```
+Expression ถูกเปลี่ยนให้เป็น Statement และค่าของ Block จะเป็น `()` หรือ **Unit Type**
+
+ดังนั้น `;` ใน Rust ไม่ได้มีหน้าที่เพียง "จบคำสั่ง" แต่สามารถมีผลต่อ **ความหมายของ Expression และค่าที่ Expression คืนออกมา**
 
 ### 9.3 Type System
 
-เมื่อใช้ Expression เพื่อสร้างค่า Type ของค่าที่ได้ต้องสอดคล้องกัน โดยเฉพาะเมื่อใช้ if เป็น Expression  
-ตัวอย่างที่ถูกต้อง:
+Expression ใน Rust ทุกตัวจะมี Type และ Compiler จะตรวจสอบ Type ตั้งแต่ Compile Time  
+ตัวอย่าง:
 ```rust
-fn main() {
-    let score = 75;
-
-    let grade = if score >= 70 {
-        "Pass"
-    } else {
-        "Fail"
-    };
-
-    println!("{}", grade);
-}
+let x = 10 + 20;
 ```
-ทั้งสอง branch คืนค่าเป็น `&str` เหมือนกัน จึงสามารถนำผลลัพธ์ไปเก็บใน grade ได้
+Expression `10 + 20` มี Type เป็นจำนวนเต็ม เช่น `int` ตามบริบทของการอนุมาน Type  
+
+Rust ยังตรวจสอบว่า Expression มี Type ที่สอดคล้องกันหรือไม่
+```rust
+let result = if true {
+    10
+} else {
+    20
+};
+```
+ถูกต้อง เพราะทั้งสอง Branch ให้ค่า `int`
+
+```rust
+let result = if true {
+    10
+} else {
+    "Hello"
+};
+```
+ไม่ถูกต้อง เพราะ Branch หนึ่งให้ `int` และอีก Branch ให้ `string `
+
+ดังนั้น Expression & Statements **มีความสัมพันธ์กับ Static Type System, Type Checking และ Type Inference ของ Rust โดย Compiler สามารถตรวจพบข้อผิดพลาดก่อนโปรแกรมทำงาน**
+
 
 ### 9.4 Memory / Resource Management
 
-Block มี Scope ของตัวเอง ตัวแปรที่ประกาศภายใน block สามารถใช้ได้เฉพาะภายใน block นั้น  
+Expression และ Statement ใน Rust ทำงานร่วมกับระบบ **Ownership, Borrowing และ Lifetime** ซึ่งเป็นหัวใจสำคัญในการจัดการ Memory ของภาษา  
+
 ตัวอย่าง:
 ```rust
-fn main() {
-    let result = {
-        let x = 10;
-        x + 5
-    };
-
-    println!("{}", result);
-
-    // println!("{}", x); // Error
-}
+let s1 = String::from("Hello");
+let s2 = s1;
 ```
-ตัวแปร `x` สามารถใช้ภายใน `{ ... }` เท่านั้น แต่ `result` ได้รับค่า `15` จาก block และสามารถใช้ต่อด้านนอกได้
+เมื่อ `s1` ถูกกำหนดให้ `s2` จะเกิด Move ทำให้ Ownership ของข้อมูลย้ายไปยัง `s2 ` 
+
+**ดังนั้น:**
+```rust
+// println!("{}", s1);
+```
+จะเกิด Compile Error เพราะ `s1` ไม่ได้เป็นเจ้าของข้อมูลแล้ว  
+
+Rust ยังสามารถใช้ Borrowing:
+```rust
+let s = String::from("Hello");
+let len = calculate_length(&s);
+```
+`&s` คือการยืมข้อมูลโดยไม่ย้าย **Ownership**
+
+ในมุมมอง PPL สิ่งนี้แสดงให้เห็นว่า Semantics ของการกำหนดค่าและการส่งค่าให้ Expression/Function มีความเกี่ยวข้องกับ Ownership และ Resource Management  
+
+ข้อดีคือ Rust สามารถตรวจสอบปัญหา Memory จำนวนมากใน Compile Time โดยไม่ต้องใช้ Garbage Collector
 
 ### 9.5 Abstraction / Other PPL Concepts
 
-Rust มีแนวคิด `Expression-oriented programming` คือโครงสร้างหลายอย่างสามารถสร้างค่าได้ เช่น `if`, `loop` และ block  
+Expression & Statements เชื่อมโยงกับแนวคิด PPL หลายด้าน  
+
+#### 1. Scope 
+ตัวแปรที่ประกาศภายใน Block จะมี Scope อยู่ภายใน Block นั้น
+```rust
+{
+    let x = 10;
+    println!("{}", x);
+}
+
+// x ไม่สามารถใช้ตรงนี้ได้
+```
+เมื่อออกจาก Scope ตัวแปรจะหมดขอบเขต และถ้าเป็น Resource ที่มี Ownership ก็สามารถถูกทำลายตามกฎของ Rust ได้  
+
+#### 2. Binding  
+การประกาศ:
+```rust
+let x = 10;
+```
+เป็นการสร้าง Binding ระหว่างชื่อ `x` กับ Value `10 ` 
+
+Rust มีคุณสมบัติที่ Binding เป็น **Immutable โดย Default**  
+```rust
+let x = 10;
+// x = 20; // Error
+```
+หากต้องการให้เปลี่ยนค่าได้:  
+
+```rust
+let mut x = 10;
+x = 20;
+```
+#### 3. Abstraction  
+Function สามารถใช้ซ่อนรายละเอียดการทำงานและรับ Expression เป็น Input/Output
+```rust
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+```
+`a + b` เป็น Expression ที่สร้างผลลัพธ์ให้ Function  
+
+#### 4. Paradigm  
+Rust เป็น **Multi-paradigm Language** และมีลักษณะ **Expression-oriented**
+
+สามารถเขียนได้ทั้งรูปแบบ Imperative และ Functional-style  
+
 ตัวอย่าง:
 ```rust
-fn main() {
-    let number = 10;
-
-    let result = if number > 5 {
-        100
-    } else {
-        0
-    };
-
-    println!("{}", result);
-}
+let result = if x > 0 {
+    x * 2
+} else {
+    0
+};
 ```
-ในที่นี้ `if` ไม่ได้เป็นเพียงคำสั่งควบคุมการทำงาน แต่เป็น Expression ที่สร้างค่า `100` หรือ `0` แล้วนำไปเก็บใน `result`
+แทนที่จะต้องสร้างตัวแปรแล้วกำหนดค่าภายในแต่ละ Branch
 
 ### 9.6 Why Rust?
+Rust ออกแบบ Expression & Statements ให้ทำงานร่วมกับ **Static Type System** และ **Ownership System** เพื่อให้ได้ทั้ง **Safety, Reliability และ Performance**  
 
-Rust ใช้แนวคิด `Expression-oriented programming` เพื่อให้โค้ดสามารถเขียนอย่างกระชับและมีโครงสร้างชัดเจน เช่น การใช้ block หรือ `if` เพื่อสร้างค่าโดยตรง รวมถึง `loop` ที่สามารถคืนค่าผ่าน `break value` ได้  
-ตัวอย่าง loop ที่คืนค่า:
-```rust
-fn main() {
-    let mut counter = 0;
+**Safety**  
+Compiler ตรวจสอบ **Type, Ownership และ Borrowing** ทำให้สามารถตรวจพบปัญหาหลายอย่างก่อน Runtime  
 
-    let result = loop {
-        counter += 1;
+**Reliability**  
+การบังคับใช้ Type และ Ownership ทำให้พฤติกรรมของโปรแกรมมีความชัดเจนและลดข้อผิดพลาดจากการจัดการข้อมูล  
 
-        if counter == 3 {
-            break counter * 10;
-        }
-    };
+**Memory Safety**  
+Ownership และ Borrowing ช่วยป้องกันปัญหา เช่น  
+- Use-after-free  
+- Double-free  
+- Dangling Reference บางรูปแบบ  
+- Data Race บางประเภท
 
-    println!("{}", result);
-}
-```
+**Performance**
+Rust ไม่มี Garbage Collector จึงสามารถควบคุม Resource ได้อย่างมีประสิทธิภาพ และมี Runtime Overhead ต่ำ เหมาะกับงานที่ต้องการ Performance สูง  
+
+**Expression-oriented Design**
+การที่ `if`, `match` และ `Block` สามารถคืนค่าได้ ทำให้เขียน Logic ได้กระชับและสามารถนำผลลัพธ์ไปประกอบกับ Expression อื่นได้ทันที
 
 ---
 
@@ -382,6 +477,7 @@ fn main() {
 
 **Comparison Language:** `[Python / C / C++ / Java / Kotlin / ...]`
 
+## Rust Vs Python
 | Aspect | Rust | Python |
 |---|---|---|
 | Syntax | `ใช้ {} สำหรับ Block และ ; ใช้แยก Statement` | `ใช้ indentation เพื่อกำหนด Block` |
@@ -433,6 +529,112 @@ B
 ```
 ใน Python ต้องกำหนดค่าให้ `grade` ภายในแต่ละ branch ของ `if` ขณะที่ Rust สามารถใช้ `if` เป็น Expression แล้วกำหนดผลลัพธ์ให้ `grade` โดยตรง
 
+## Rust Vs Java
+| Aspect | Rust | Java |
+|---|---|---|
+| Syntax | `ใช้ {} สำหรับ Block และ ; ใช้แยก Statement` | `ใช้ indentation เพื่อกำหนด Block` |
+| Semantics / Behavior | `if, loop และ Block สามารถเป็น Expression และคืนค่าได้` | `if และ loop ใช้ในลักษณะ Statement เป็นหลัก` |
+| Type System | `Static Type System` | `Dynamic Type System` |
+| Memory Management | `ใช้ Ownership และ Borrowing` | `จัดการ Memory อัตโนมัติ` |
+| Safety | `Compiler ตรวจสอบ Type และกฎ Ownership/Borrowing` | `ตรวจสอบ Type หลัก ๆ ขณะ Runtime` |
+
+### Rust Example
+
+```rust
+fn main() {
+    let score = 75;
+
+    let grade = if score >= 80 {
+        "A"
+    } else if score >= 70 {
+        "B"
+    } else {
+        "C"
+    };
+
+    println!("{}", grade);
+}
+```
+Output:
+```rust
+B
+```
+จุดสำคัญคือ `if` สามารถเป็น Expression และคืนค่า `"B"` ให้กับตัวแปร `grade` ได้
+
+### `[Java]` Example
+
+```python
+score = 75
+
+if score >= 80:
+    grade = "A"
+elif score >= 70:
+    grade = "B"
+else:
+    grade = "C"
+
+print(grade)
+```
+Output:
+```python
+B
+```
+ใน Python ต้องกำหนดค่าให้ `grade` ภายในแต่ละ branch ของ `if` ขณะที่ Rust สามารถใช้ `if` เป็น Expression แล้วกำหนดผลลัพธ์ให้ `grade` โดยตรง
+
+---
+
+## Rust Vs C
+| Aspect | Rust | C |
+|---|---|---|
+| Syntax | `ใช้ {} สำหรับ Block และ ; ใช้แยก Statement` | `ใช้ indentation เพื่อกำหนด Block` |
+| Semantics / Behavior | `if, loop และ Block สามารถเป็น Expression และคืนค่าได้` | `if และ loop ใช้ในลักษณะ Statement เป็นหลัก` |
+| Type System | `Static Type System` | `Dynamic Type System` |
+| Memory Management | `ใช้ Ownership และ Borrowing` | `จัดการ Memory อัตโนมัติ` |
+| Safety | `Compiler ตรวจสอบ Type และกฎ Ownership/Borrowing` | `ตรวจสอบ Type หลัก ๆ ขณะ Runtime` |
+
+### Rust Example
+
+```rust
+fn main() {
+    let score = 75;
+
+    let grade = if score >= 80 {
+        "A"
+    } else if score >= 70 {
+        "B"
+    } else {
+        "C"
+    };
+
+    println!("{}", grade);
+}
+```
+Output:
+```rust
+B
+```
+จุดสำคัญคือ `if` สามารถเป็น Expression และคืนค่า `"B"` ให้กับตัวแปร `grade` ได้
+
+### `[C]` Example
+
+```python
+score = 75
+
+if score >= 80:
+    grade = "A"
+elif score >= 70:
+    grade = "B"
+else:
+    grade = "C"
+
+print(grade)
+```
+Output:
+```python
+B
+```
+ใน Python ต้องกำหนดค่าให้ `grade` ภายในแต่ละ branch ของ `if` ขณะที่ Rust สามารถใช้ `if` เป็น Expression แล้วกำหนดผลลัพธ์ให้ `grade` โดยตรง
+
 ### Analysis
 
 ตัวอย่างนี้แสดงความแตกต่างด้านการออกแบบภาษาอย่างชัดเจน:
@@ -455,7 +657,6 @@ else:
 `if` ทำหน้าที่ควบคุมการทำงาน และการกำหนดค่าให้ `grade` เกิดขึ้นภายในแต่ละ branch แสดงให้เห็นว่า Rust มีแนวทาง Expression-oriented ที่ทำให้โครงสร้างควบคุมสามารถนำมาใช้สร้างค่าได้โดยตรง
 
 ---
-
 ## 11. Teach Your Topic
 
 การนำเสนอมีสมาชิก **4 คน คนละประมาณ 5 นาที**
