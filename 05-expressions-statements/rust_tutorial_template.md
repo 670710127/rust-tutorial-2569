@@ -420,11 +420,11 @@ println!("{}", grade);
 ### Challenge — `[รวม if expression + block expression + semicolon]`
 **Problem**
 
-1.result มีค่าเท่าไร
-2.if ... else ... .ในโค้ตที่แนบให้เป็น Statement หรือ Expression
-3.ถ้าเติม ; หลัง if ทั้งก้อน จะเกิดอะไรขึ้น
+`1.result มีค่าเท่าไร`
+`2.if ... else ... .ในโค้ตที่แนบให้เป็น Statement หรือ Expression`
+`3.ถ้าเติม ; หลัง if ทั้งก้อน จะเกิดอะไรขึ้น`
 
-จากโค้ต
+`จากโค้ต`
 ```rust
 let x = 4;
 
