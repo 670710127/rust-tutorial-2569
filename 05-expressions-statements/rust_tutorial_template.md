@@ -532,11 +532,11 @@ B
 ## Rust Vs Java
 | Aspect | Rust | Java |
 |---|---|---|
-| Syntax | `ใช้ {} สำหรับ Block และ ; ใช้แยก Statement` | `ใช้ indentation เพื่อกำหนด Block` |
-| Semantics / Behavior | `if, loop และ Block สามารถเป็น Expression และคืนค่าได้` | `if และ loop ใช้ในลักษณะ Statement เป็นหลัก` |
-| Type System | `Static Type System` | `Dynamic Type System` |
-| Memory Management | `ใช้ Ownership และ Borrowing` | `จัดการ Memory อัตโนมัติ` |
-| Safety | `Compiler ตรวจสอบ Type และกฎ Ownership/Borrowing` | `ตรวจสอบ Type หลัก ๆ ขณะ Runtime` |
+| Syntax | `ใช้ {} สำหรับ Block และ ; สำหรับสิ้นสุด Statement โดย if, match และ Block สามารถเป็น Expression ได้` | `ใช้ {} สำหรับ Block และ ; สำหรับสิ้นสุด Statement โดย if แบบปกติเป็น Statement` |
+| Semantics / Behavior | `Expression สามารถประเมินผลและคืนค่าได้ เช่น if สามารถคืนค่าให้ตัวแปรโดยตรง` | `if แบบปกติใช้ควบคุมการทำงาน และไม่คืนค่าโดยตรง แต่สามารถใช้ Ternary Operator ?: เพื่อสร้างค่าได้` |
+| Type System | `Static Type System มี Type Checking และ Type Inference` | `Static Type System มี Type Checking และ Type Inference` |
+| Memory Management | `ใช้ Ownership, Borrowing และ Lifetime` | `ใช้ Garbage Collector (GC) จัดการ Memory อัตโนมัติ` |
+| Safety | `Compiler ตรวจสอบ Type, Ownership และ Borrowing ช่วยป้องกัน Memory Error หลายประเภทตั้งแต่ Compile Time` | `มี Memory Safety จาก Garbage Collector และไม่มี Pointer ให้จัดการโดยตรง แต่ข้อผิดพลาดบางอย่างเกิดขึ้นได้ตอน Runtime` |
 
 ### Rust Example
 
@@ -563,34 +563,40 @@ B
 
 ### `[Java]` Example
 
-```python
-score = 75
+```java
+public class Main {
+    public static void main(String[] args) {
+        int score = 75;
+        String grade;
 
-if score >= 80:
-    grade = "A"
-elif score >= 70:
-    grade = "B"
-else:
-    grade = "C"
+        if (score >= 80) {
+            grade = "A";
+        } else if (score >= 70) {
+            grade = "B";
+        } else {
+            grade = "C";
+        }
 
-print(grade)
+        System.out.println(grade);
+    }
+}
 ```
 Output:
-```python
+```java
 B
 ```
-ใน Python ต้องกำหนดค่าให้ `grade` ภายในแต่ละ branch ของ `if` ขณะที่ Rust สามารถใช้ `if` เป็น Expression แล้วกำหนดผลลัพธ์ให้ `grade` โดยตรง
+ใน Java `if` แบบปกติเป็น Statement จึงต้องกำหนดค่าให้ `grade` ภายในแต่ละ Branch
 
 ---
 
 ## Rust Vs C
 | Aspect | Rust | C |
 |---|---|---|
-| Syntax | `ใช้ {} สำหรับ Block และ ; ใช้แยก Statement` | `ใช้ indentation เพื่อกำหนด Block` |
-| Semantics / Behavior | `if, loop และ Block สามารถเป็น Expression และคืนค่าได้` | `if และ loop ใช้ในลักษณะ Statement เป็นหลัก` |
-| Type System | `Static Type System` | `Dynamic Type System` |
-| Memory Management | `ใช้ Ownership และ Borrowing` | `จัดการ Memory อัตโนมัติ` |
-| Safety | `Compiler ตรวจสอบ Type และกฎ Ownership/Borrowing` | `ตรวจสอบ Type หลัก ๆ ขณะ Runtime` |
+| Syntax | `ใช้ {} สำหรับ Block และ ; สำหรับสิ้นสุด Statement โดย if, match และ Block สามารถเป็น Expression ได้` | `ใช้ {} สำหรับ Block และ ; สำหรับสิ้นสุด Statement โดย if และ switch เป็น Statement` |
+| Semantics / Behavior | `Expression สามารถประเมินผลและคืนค่าได้ เช่น if สามารถคืนค่าให้ตัวแปรโดยตรง` | `if ใช้ควบคุมลำดับการทำงาน และไม่สามารถคืนค่าโดยตรง ต้องกำหนดค่าภายในแต่ละ Branch` |
+| Type System | `Static Type System มี Type Checking และ Type Inference ที่เข้มงวด` | `Static Type System แต่มี Implicit Conversion และการแปลง Type ที่ยืดหยุ่นกว่า` |
+| Memory Management | `ใช้ Ownership, Borrowing และ Lifetime เพื่อควบคุมการใช้ Memory` | `Programmer จัดการ Memory เอง เช่น malloc() และ free()` |
+| Safety | `Compiler ตรวจสอบ Type, Ownership และ Borrowing ช่วยป้องกัน Memory Error หลายประเภทตั้งแต่ Compile Time` | `Programmer ต้องรับผิดชอบ Memory Safety เอง จึงมีโอกาสเกิด Memory Leak, Dangling Pointer หรือ Use-after-free` |
 
 ### Rust Example
 
@@ -617,44 +623,42 @@ B
 
 ### `[C]` Example
 
-```python
-score = 75
+```c
+#include <stdio.h>
 
-if score >= 80:
-    grade = "A"
-elif score >= 70:
-    grade = "B"
-else:
-    grade = "C"
+int main() {
+    int score = 75;
+    char *grade;
 
-print(grade)
+    if (score >= 80) {
+        grade = "A";
+    } else if (score >= 70) {
+        grade = "B";
+    } else {
+        grade = "C";
+    }
+
+    printf("%s\n", grade);
+
+    return 0;
+}
 ```
 Output:
-```python
+```c
 B
 ```
-ใน Python ต้องกำหนดค่าให้ `grade` ภายในแต่ละ branch ของ `if` ขณะที่ Rust สามารถใช้ `if` เป็น Expression แล้วกำหนดผลลัพธ์ให้ `grade` โดยตรง
+ใน C `if` เป็น Statement จึงไม่ได้คืนค่าโดยตรง แต่ต้องกำหนดค่าให้ `grade` ภายในแต่ละ Branch
 
-### Analysis
+### Analysis  
 
-ตัวอย่างนี้แสดงความแตกต่างด้านการออกแบบภาษาอย่างชัดเจน:
-```rust
-let grade = if score >= 70 {
-    "B"
-} else {
-    "C"
-};
-```
-`if` สร้างค่าออกมา แล้วนำค่านั้นไปกำหนดให้ `grade`  
+Rust, Python, Java และ C มีแนวคิดเกี่ยวกับ Expression & Statements ที่แตกต่างกัน เนื่องจากถูกออกแบบโดยมีเป้าหมายของภาษาไม่เหมือนกัน
+- **Rust** เน้น Safety และ Performance โดยออกแบบให้ `if`, `match` และ Block สามารถเป็น Expression และคืนค่าได้โดยตรง เช่น `let x = if ... { ... } else { ... };` นอกจากนี้ยังใช้ Ownership และ Borrowing เพื่อให้ Compiler ตรวจสอบการจัดการ Memory ตั้งแต่ Compile Time
+  
+- **Python** เน้น ความอ่านง่ายและความสะดวกในการเขียนโปรแกรม จึงใช้ Indentation กำหนด Block และ `if` แบบปกติเป็น Statement หากต้องการ Expression ที่เลือกค่าจะใช้ Conditional Expression เช่น `x = "A" if score >= 80 else "B"` Python ใช้ Dynamic Typing และจัดการ Memory อัตโนมัติ
 
-Python:
-```python
-if score >= 70:
-    grade = "B"
-else:
-    grade = "C"
-```
-`if` ทำหน้าที่ควบคุมการทำงาน และการกำหนดค่าให้ `grade` เกิดขึ้นภายในแต่ละ branch แสดงให้เห็นว่า Rust มีแนวทาง Expression-oriented ที่ทำให้โครงสร้างควบคุมสามารถนำมาใช้สร้างค่าได้โดยตรง
+- **Java** เน้น Object-Oriented Programming, Portability และความปลอดภัยในการจัดการ Memory โดย `if` แบบปกติเป็น Statement แต่มี Ternary Operator และ `switch expression` ที่สามารถคืนค่าได้ Java ใช้ Static Type System และ Garbage Collector ในการจัดการ Memory
+  
+- **C** เน้น Performance, การควบคุม Hardware และความใกล้ชิดกับระบบ จึงออกแบบ `if` และ `switch` เป็น Statement และให้ Programmer ควบคุม Memory ได้โดยตรงผ่าน Pointer, `malloc()` และ `free()` ข้อแลกเปลี่ยนคือ Programmer ต้องรับผิดชอบ Memory Safety เอง
 
 ---
 ## 11. Teach Your Topic
