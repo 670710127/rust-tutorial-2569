@@ -685,15 +685,25 @@ Exercises + Common Mistakes + Challenge
 
 > แนะนำให้มีอย่างน้อย **4 แหล่งอ้างอิง** และควรใช้เอกสารทางการเป็นหลัก
 
+### Rust
 1. [The Rust Programming Language — Statements and Expressions](https://doc.rust-lang.org/book/ch03-03-how-functions-work.html#statements-and-expressions)
-
 2. [Rust By Example — Expressions](https://doc.rust-lang.org/rust-by-example/expression.html)
-
 3. [The Rust Reference — Statements and Expressions](https://doc.rust-lang.org/reference/statements-and-expressions.html)
+4. [The Rust Reference — Statements](https://doc.rust-lang.org/reference/statements.html)
 
-4. [The Rust Reference — Block Expressions](https://doc.rust-lang.org/reference/expressions/block-expr.html)
+### Python
+5. [Python Language Reference — Expressions](https://docs.python.org/3/reference/expressions.html)
+6. [Python Language Reference — Simple Statements](https://docs.python.org/3/reference/simple_stmts.html)
+7. [Python Language Reference — Compound Statements](https://docs.python.org/3/reference/compound_stmts.html)
 
-5. [Rust Standard Library — Unit Type `()`](https://doc.rust-lang.org/std/primitive.unit.html)
+### Java
+8. [Java Language Specification — Chapter 14: Blocks, Statements, and Patterns](https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html)
+9. [Java Language Specification — Chapter 15: Expressions](https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html)
+10. [Oracle Java Tutorial — Expressions, Statements, and Blocks](https://docs.oracle.com/javase/tutorial/java/nutsandbolts/expressions.html)
+
+### C
+- [ISO/IEC JTC1/SC22/WG14 — Official C Working Group](https://www.open-std.org/jtc1/sc22/wg14/)
+- [WG14 — C Standard Project and Drafts](https://www.open-std.org/jtc1/sc22/wg14/www/projects.html)
 
 ---
 
@@ -703,7 +713,7 @@ Exercises + Common Mistakes + Challenge
 
 | AI Tool | Purpose | How the Result Was Verified |
 |---|---|---|
-| `ChatGPT` | `ค้นหาข้อมูล อธิบาย และสรุปหัวข้อ` | `ตรวจสอบกับเอกสารทางการของ Rust และทดลองรันโค้ด` |
+| `ChatGPT` | `ค้นหาข้อมูล อธิบาย และสรุปหัวข้อ` | `ตรวจสอบกับเอกสารทางการของ Rust` |
 
 ### Declaration
 
