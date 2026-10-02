@@ -25,7 +25,7 @@
 1. อธิบายความแตกต่างระหว่าง **Expression** และ **Statement** ใน Rust ได้
 2. อธิบายการทำงานของ **Block Expression**, **Tail Expression** และการคืนค่า (return value) จาก block/function ได้
 3. เขียนและวิเคราะห์การใช้ `if` และ `match` ในฐานะ Expression ได้
-4. เปรียบเทียบแนวคิด Expressions & Statements ของ Rust กับภาษา Python ได้
+4. เปรียบเทียบแนวคิด Expressions & Statements ของ Rust กับภาษาอื่นๆได้
 
 ---
 
@@ -49,7 +49,7 @@ Rust เป็นภาษาที่เน้นการทำงานผ่
 
 `5 + 3` เป็น Expression และให้ value เป็น `8`
 
-**Statement** เป็นองค์ประกอบภายใน block ที่ใช้ประกาศสิ่งต่าง ๆ หรือจัดลำดับการทำงาน
+**Statement** คือคำสั่งที่ใช้ประกาศหรือสั่งให้โปรแกรมทำงาน โดยไม่ได้ใช้ผลลัพธต่อ
 
 ```rust
 let x = 5 + 3;
@@ -198,6 +198,50 @@ break 10;
 
 ---
 
+### 4.7 Why Expression-Oriented?
+
+การที่ `if` และ `match` สามารถให้ value ได้ ทำให้สามารถนำผลลัพธ์มากำหนดให้ตัวแปรได้โดยตรง โดยไม่ต้องสร้างตัวแปรก่อนแล้วเปลี่ยนค่าภายหลัง ซึ่งช่วยลด mutable state ที่ไม่จำเป็น และทำให้ติดตามที่มาของค่าได้ง่ายขึ้น
+
+```rust
+// เปลี่ยนค่าภายหลัง
+let mut price = 0;
+
+if is_member {
+    price = 80;
+} else {
+    price = 100;
+}
+```
+สามารถเขียนเป็น:
+
+```rust
+// สร้างค่าจาก Expression โดยตรง
+let price = if is_member {
+    80
+} else {
+    100
+};
+```
+
+นอกจากนี้ ผลลัพธ์ของ Expression ยังสามารถนำไปเป็นส่วนหนึ่งของ Expression อื่นได้โดยตรง
+
+```rust
+fn main() {
+    let is_member = true;
+    let quantity = 3;
+
+    let total = quantity * if is_member {
+        80
+    } else {
+        100
+    };
+
+    println!("{}", total);
+}
+```
+
+---
+
 ## 5. Important Syntax / Rules
 
 | Syntax / Rule | Meaning | Example |
@@ -207,14 +251,16 @@ break 10;
 | `{ ... final_expression }` | Block Expression ที่ใช้ค่าจาก Expression สุดท้ายเป็นค่าของ block | `{ let x = 5; x + 1 }` |
 | `if ... { expr } else { expr }` | `if` สามารถสร้าง value ได้ | `let x = if c { 1 } else { 0 };` |
 | `match value { ... }` | `match` สามารถสร้าง value จาก arm ที่ตรงได้ | `let x = match n { 1 => "A", _ => "B" };` |
+| `loop { ... break value; }`     | `break` สามารถส่ง value ออกจาก `loop` ได้ | `let x = loop { break 10; };` |
 
 ### Important Rules
 
 1. Expression Statement จะ evaluate Expression แต่ไม่ใช้ค่าผลลัพธ์ต่อ
 2. Expression สุดท้ายของ block ที่ไม่มี `;` จะเป็น Tail Expression และค่าของมันจะกลายเป็นค่าของ block
 3. ถ้า block ไม่มี Tail Expression และจบการทำงานตามปกติ block จะมีค่าเป็น `()`
-4. `if` ที่ใช้เป็น Expression ต้องให้ค่าจากแต่ละ branch ที่มี type เข้ากันได้
-5. `match` ที่ใช้เป็น Expression จะให้ value จาก arm ที่ถูกเลือก
+4. `if` และ `match` ที่ใช้เป็น Expression จะให้ value ที่มี type เข้ากันได้
+5. `break value;` สามารถใช้ส่ง value ออกจาก `loop` ได้
+6. Value จาก Expression สามารถนำไปประกอบเป็นส่วนหนึ่งของ Expression อื่นได้
 
 ---
 
