@@ -25,7 +25,7 @@
 1. อธิบายความแตกต่างระหว่าง **Expression** และ **Statement** ใน Rust ได้
 2. อธิบายการทำงานของ **Block Expression**, **Tail Expression** และการคืนค่า (return value) จาก block/function ได้
 3. เขียนและวิเคราะห์การใช้ `if` และ `match` ในฐานะ Expression ได้
-4. เปรียบเทียบแนวคิด Expressions & Statements ของ Rust กับภาษา Python ได้
+4. เปรียบเทียบแนวคิด Expressions & Statements ของ Rust กับภาษาอื่นๆได้
 
 ---
 
@@ -195,6 +195,50 @@ break 10;
 ```
 
 `break` จะหยุด `loop` และส่งค่า `10` ออกมาเป็น value ของ `loop` ทั้งก้อน ดังนั้น `result` จะมีค่าเป็น `10`
+
+---
+
+### 4.7 Why Expression-Oriented?
+
+การที่ `if` และ `match` สามารถให้ value ได้ ทำให้สามารถนำผลลัพธ์มากำหนดให้ตัวแปรได้โดยตรง โดยไม่ต้องสร้างตัวแปรก่อนแล้วเปลี่ยนค่าภายหลัง ซึ่งช่วยลด mutable state ที่ไม่จำเป็น และทำให้ติดตามที่มาของค่าได้ง่ายขึ้น
+
+```rust
+// เปลี่ยนค่าภายหลัง
+let mut price = 0;
+
+if is_member {
+    price = 80;
+} else {
+    price = 100;
+}
+```
+สามารถเขียนเป็น:
+
+```rust
+// สร้างค่าจาก Expression โดยตรง
+let price = if is_member {
+    80
+} else {
+    100
+};
+```
+
+นอกจากนี้ ผลลัพธ์ของ Expression ยังสามารถนำไปเป็นส่วนหนึ่งของ Expression อื่นได้โดยตรง
+
+```rust
+fn main() {
+    let is_member = true;
+    let quantity = 3;
+
+    let total = quantity * if is_member {
+        80
+    } else {
+        100
+    };
+
+    println!("{}", total);
+}
+```
 
 ---
 
