@@ -1070,10 +1070,10 @@ Exercises + Common Mistakes + Challenge
 
 | Member | Issues | Commits | Pull Requests | Code Reviews | Contribution |
 |---|---:|---:|---:|---:|---|
-| Member 1 | `0` | `13` | `3` | `0` | `Concept + Short Code Illustration` |
+| Member 1 | `0` | `20` | `3` | `0` | `Concept + Short Code Illustration` |
 | Member 2 | `0` | `3` | `1` | `0` | `Detailed Code + Live Demo` |
 | Member 3 | `0` | `3` | `1` | `0` | `Rust vs Other Language + PPL Analysis` |
-| Member 4 | `0` | `8` | `2` | `0` | `Exercises + Common Mistakes + Challenge` |
+| Member 4 | `0` | `23` | `2` | `0` | `Exercises + Common Mistakes + Challenge` |
 
 ### Teamwork Reflection
 
@@ -1117,8 +1117,8 @@ Exercises + Common Mistakes + Challenge
 
 **Chapter Path:** `05-expressions-statements/`
 
-**Final PR:** `#[PR number]`
+**Final PR:** `#32`
 
 **Submitted by:** `Group 05`
 
-**Date:** `[YYYY-MM-DD]`
+**Date:** `2026-10-3`
