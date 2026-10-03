@@ -594,27 +594,207 @@ println!("{}", result);
 
 ### 9.1 Syntax
 
-`[Topic นี้เกี่ยวข้องกับ syntax อย่างไร]`
+Syntax คือกฎที่กำหนดว่าโครงสร้างของโปรแกรมต้องเขียนอย่างไรจึงจะถูกต้องตามภาษานั้น
+
+ใน Rust, Expression คือโครงสร้างที่สามารถประเมินผลแล้วได้ค่า (Value) ส่วน Statement คือคำสั่งที่ใช้ดำเนินการบางอย่าง โดย Rust ใช้ `{ }` เพื่อกำหนด Block และใช้ `;` เพื่อจบ Statement ในหลายกรณี
+
+ตัวอย่าง:
+```rust
+let x = 5 + 3;
+```
+`10 + 5` เป็น `Expression` เพราะให้ค่า 15
+`let x = ...;` เป็น `Statement`
+
+Rust มีลักษณะเด่นคือ Expression สามารถอยู่ในตำแหน่งที่ต้องการค่าได้ เช่น if สามารถใช้เป็น Expression ได้
+
+```rust
+let result = if x > 0 {
+    1
+} else {
+    -1
+};
+```
+**ดังนั้นในมุมมอง PPL Syntax ของ Rust แสดงให้เห็นว่า ภาษาออกแบบ Grammar ให้ Control Flow บางชนิดสามารถทำหน้าที่เป็น Expression ได้**
 
 ### 9.2 Semantics
 
-`[คำสั่ง/construct เหล่านี้มีความหมายหรือพฤติกรรมอย่างไร]`
+Semantics คือความหมายหรือพฤติกรรมของโครงสร้างภาษาเมื่อถูกประเมินหรือทำงาน
+สำหรับ Rust:  
+`Expression` มีหน้าที่ประเมินผลและสร้าง Value  
+`Statement` มีหน้าที่ดำเนินการหรือเปลี่ยนแปลงสถานะของโปรแกรม
+
+ตัวอย่าง:
+```rust
+let x = {
+    let a = 10;
+    a + 5
+};
+```
+
+การทำงานคือ
+
+1. สร้าง `a` และกำหนดค่า `10 `   
+2. ประเมิน `a + 5`  
+3. ได้ค่า `15`  
+4. Block คืนค่า `15`  
+5. `x` จึงมีค่า `15`
+
+อีกจุดสำคัญคือ `;` มีผลต่อ Semantics
+```rust
+{
+    10 + 5
+}
+```
+Block นี้คืนค่า `15`
+
+แต่
+```rust
+{
+    10 + 5;
+}
+```
+Expression ถูกเปลี่ยนให้เป็น Statement และค่าของ Block จะเป็น `()` หรือ **Unit Type**
+
+ดังนั้น `;` ใน Rust ไม่ได้มีหน้าที่เพียง "จบคำสั่ง" แต่สามารถมีผลต่อ **ความหมายของ Expression และค่าที่ Expression คืนออกมา**
 
 ### 9.3 Type System
 
-`[เกี่ยวข้องกับ type system อย่างไร ถ้ามี]`
+Expression ใน Rust ทุกตัวจะมี Type และ Compiler จะตรวจสอบ Type ตั้งแต่ Compile Time  
+ตัวอย่าง:
+```rust
+let x = 10 + 20;
+```
+Expression `10 + 20` มี Type เป็นจำนวนเต็ม เช่น `int` ตามบริบทของการอนุมาน Type  
+
+Rust ยังตรวจสอบว่า Expression มี Type ที่สอดคล้องกันหรือไม่
+```rust
+let result = if true {
+    10
+} else {
+    20
+};
+```
+ถูกต้อง เพราะทั้งสอง Branch ให้ค่า `int`
+
+```rust
+let result = if true {
+    10
+} else {
+    "Hello"
+};
+```
+ไม่ถูกต้อง เพราะ Branch หนึ่งให้ `int` และอีก Branch ให้ `string `
+
+ดังนั้น Expression & Statements **มีความสัมพันธ์กับ Static Type System, Type Checking และ Type Inference ของ Rust โดย Compiler สามารถตรวจพบข้อผิดพลาดก่อนโปรแกรมทำงาน**
+
 
 ### 9.4 Memory / Resource Management
 
-`[เกี่ยวข้องกับ memory หรือ resource management อย่างไร ถ้ามี]`
+Expression และ Statement ใน Rust ทำงานร่วมกับระบบ **Ownership, Borrowing และ Lifetime** ซึ่งเป็นหัวใจสำคัญในการจัดการ Memory ของภาษา  
+
+ตัวอย่าง:
+```rust
+let s1 = String::from("Hello");
+let s2 = s1;
+```
+เมื่อ `s1` ถูกกำหนดให้ `s2` จะเกิด Move ทำให้ Ownership ของข้อมูลย้ายไปยัง `s2 ` 
+
+**ดังนั้น:**
+```rust
+// println!("{}", s1);
+```
+จะเกิด Compile Error เพราะ `s1` ไม่ได้เป็นเจ้าของข้อมูลแล้ว  
+
+Rust ยังสามารถใช้ Borrowing:
+```rust
+let s = String::from("Hello");
+let len = calculate_length(&s);
+```
+`&s` คือการยืมข้อมูลโดยไม่ย้าย **Ownership**
+
+ในมุมมอง PPL สิ่งนี้แสดงให้เห็นว่า Semantics ของการกำหนดค่าและการส่งค่าให้ Expression/Function มีความเกี่ยวข้องกับ Ownership และ Resource Management  
+
+ข้อดีคือ Rust สามารถตรวจสอบปัญหา Memory จำนวนมากใน Compile Time โดยไม่ต้องใช้ Garbage Collector
 
 ### 9.5 Abstraction / Other PPL Concepts
 
-`[อธิบาย abstraction, scope, binding, paradigm หรือแนวคิด PPL อื่นที่เกี่ยวข้อง]`
+Expression & Statements เชื่อมโยงกับแนวคิด PPL หลายด้าน  
+
+#### 1. Scope 
+ตัวแปรที่ประกาศภายใน Block จะมี Scope อยู่ภายใน Block นั้น
+```rust
+{
+    let x = 10;
+    println!("{}", x);
+}
+
+// x ไม่สามารถใช้ตรงนี้ได้
+```
+เมื่อออกจาก Scope ตัวแปรจะหมดขอบเขต และถ้าเป็น Resource ที่มี Ownership ก็สามารถถูกทำลายตามกฎของ Rust ได้  
+
+#### 2. Binding  
+การประกาศ:
+```rust
+let x = 10;
+```
+เป็นการสร้าง Binding ระหว่างชื่อ `x` กับ Value `10 ` 
+
+Rust มีคุณสมบัติที่ Binding เป็น **Immutable โดย Default**  
+```rust
+let x = 10;
+// x = 20; // Error
+```
+หากต้องการให้เปลี่ยนค่าได้:  
+
+```rust
+let mut x = 10;
+x = 20;
+```
+#### 3. Abstraction  
+Function สามารถใช้ซ่อนรายละเอียดการทำงานและรับ Expression เป็น Input/Output
+```rust
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+```
+`a + b` เป็น Expression ที่สร้างผลลัพธ์ให้ Function  
+
+#### 4. Paradigm  
+Rust เป็น **Multi-paradigm Language** และมีลักษณะ **Expression-oriented**
+
+สามารถเขียนได้ทั้งรูปแบบ Imperative และ Functional-style  
+
+ตัวอย่าง:
+```rust
+let result = if x > 0 {
+    x * 2
+} else {
+    0
+};
+```
+แทนที่จะต้องสร้างตัวแปรแล้วกำหนดค่าภายในแต่ละ Branch
 
 ### 9.6 Why Rust?
+Rust ออกแบบ Expression & Statements ให้ทำงานร่วมกับ **Static Type System** และ **Ownership System** เพื่อให้ได้ทั้ง **Safety, Reliability และ Performance**  
 
-`[Rust ใช้แนวคิดนี้เพื่อเพิ่ม safety, reliability หรือ performance อย่างไร]`
+**Safety**  
+Compiler ตรวจสอบ **Type, Ownership และ Borrowing** ทำให้สามารถตรวจพบปัญหาหลายอย่างก่อน Runtime  
+
+**Reliability**  
+การบังคับใช้ Type และ Ownership ทำให้พฤติกรรมของโปรแกรมมีความชัดเจนและลดข้อผิดพลาดจากการจัดการข้อมูล  
+
+**Memory Safety**  
+Ownership และ Borrowing ช่วยป้องกันปัญหา เช่น  
+- Use-after-free  
+- Double-free  
+- Dangling Reference บางรูปแบบ  
+- Data Race บางประเภท
+
+**Performance**
+Rust ไม่มี Garbage Collector จึงสามารถควบคุม Resource ได้อย่างมีประสิทธิภาพ และมี Runtime Overhead ต่ำ เหมาะกับงานที่ต้องการ Performance สูง  
+
+**Expression-oriented Design**
+การที่ `if`, `match` และ `Block` สามารถคืนค่าได้ ทำให้เขียน Logic ได้กระชับและสามารถนำผลลัพธ์ไปประกอบกับ Expression อื่นได้ทันที
 
 ---
 
@@ -622,32 +802,190 @@ println!("{}", result);
 
 **Comparison Language:** `[Python / C / C++ / Java / Kotlin / ...]`
 
-| Aspect | Rust | Other Language |
+## Rust Vs Python
+| Aspect | Rust | Python |
 |---|---|---|
-| Syntax | `[อธิบาย]` | `[อธิบาย]` |
-| Semantics / Behavior | `[อธิบาย]` | `[อธิบาย]` |
-| Type System | `[อธิบาย]` | `[อธิบาย]` |
-| Memory Management | `[อธิบาย]` | `[อธิบาย]` |
-| Safety | `[อธิบาย]` | `[อธิบาย]` |
+| Syntax | `ใช้ {} สำหรับ Block และ ; ใช้แยก Statement` | `ใช้ indentation เพื่อกำหนด Block` |
+| Semantics / Behavior | `if, loop และ Block สามารถเป็น Expression และคืนค่าได้` | `if และ loop ใช้ในลักษณะ Statement เป็นหลัก` |
+| Type System | `Static Type System` | `Dynamic Type System` |
+| Memory Management | `ใช้ Ownership และ Borrowing` | `จัดการ Memory อัตโนมัติ` |
+| Safety | `Compiler ตรวจสอบ Type และกฎ Ownership/Borrowing` | `ตรวจสอบ Type หลัก ๆ ขณะ Runtime` |
 
 ### Rust Example
 
 ```rust
-// Rust code
-```
+fn main() {
+    let score = 75;
 
-### `[Other Language]` Example
+    let grade = if score >= 80 {
+        "A"
+    } else if score >= 70 {
+        "B"
+    } else {
+        "C"
+    };
+
+    println!("{}", grade);
+}
+```
+Output:
+```rust
+B
+```
+จุดสำคัญคือ `if` สามารถเป็น Expression และคืนค่า `"B"` ให้กับตัวแปร `grade` ได้
+
+### `[Python]` Example
 
 ```python
-# Other language code
+score = 75
+
+if score >= 80:
+    grade = "A"
+elif score >= 70:
+    grade = "B"
+else:
+    grade = "C"
+
+print(grade)
 ```
+Output:
+```python
+B
+```
+ใน Python ต้องกำหนดค่าให้ `grade` ภายในแต่ละ branch ของ `if` ขณะที่ Rust สามารถใช้ `if` เป็น Expression แล้วกำหนดผลลัพธ์ให้ `grade` โดยตรง
 
-### Analysis
+## Rust Vs Java
+| Aspect | Rust | Java |
+|---|---|---|
+| Syntax | `ใช้ {} สำหรับ Block และ ; สำหรับสิ้นสุด Statement โดย if, match และ Block สามารถเป็น Expression ได้` | `ใช้ {} สำหรับ Block และ ; สำหรับสิ้นสุด Statement โดย if แบบปกติเป็น Statement` |
+| Semantics / Behavior | `Expression สามารถประเมินผลและคืนค่าได้ เช่น if สามารถคืนค่าให้ตัวแปรโดยตรง` | `if แบบปกติใช้ควบคุมการทำงาน และไม่คืนค่าโดยตรง แต่สามารถใช้ Ternary Operator ?: เพื่อสร้างค่าได้` |
+| Type System | `Static Type System มี Type Checking และ Type Inference` | `Static Type System มี Type Checking และ Type Inference` |
+| Memory Management | `ใช้ Ownership, Borrowing และ Lifetime` | `ใช้ Garbage Collector (GC) จัดการ Memory อัตโนมัติ` |
+| Safety | `Compiler ตรวจสอบ Type, Ownership และ Borrowing ช่วยป้องกัน Memory Error หลายประเภทตั้งแต่ Compile Time` | `มี Memory Safety จาก Garbage Collector และไม่มี Pointer ให้จัดการโดยตรง แต่ข้อผิดพลาดบางอย่างเกิดขึ้นได้ตอน Runtime` |
 
-`[อธิบายความแตกต่างที่สำคัญ และเหตุผลด้านการออกแบบภาษา]`
+### Rust Example
+
+```rust
+fn main() {
+    let score = 75;
+
+    let grade = if score >= 80 {
+        "A"
+    } else if score >= 70 {
+        "B"
+    } else {
+        "C"
+    };
+
+    println!("{}", grade);
+}
+```
+Output:
+```rust
+B
+```
+จุดสำคัญคือ `if` สามารถเป็น Expression และคืนค่า `"B"` ให้กับตัวแปร `grade` ได้
+
+### `[Java]` Example
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        int score = 75;
+        String grade;
+
+        if (score >= 80) {
+            grade = "A";
+        } else if (score >= 70) {
+            grade = "B";
+        } else {
+            grade = "C";
+        }
+
+        System.out.println(grade);
+    }
+}
+```
+Output:
+```java
+B
+```
+ใน Java `if` แบบปกติเป็น Statement จึงต้องกำหนดค่าให้ `grade` ภายในแต่ละ Branch
 
 ---
 
+## Rust Vs C
+| Aspect | Rust | C |
+|---|---|---|
+| Syntax | `ใช้ {} สำหรับ Block และ ; สำหรับสิ้นสุด Statement โดย if, match และ Block สามารถเป็น Expression ได้` | `ใช้ {} สำหรับ Block และ ; สำหรับสิ้นสุด Statement โดย if และ switch เป็น Statement` |
+| Semantics / Behavior | `Expression สามารถประเมินผลและคืนค่าได้ เช่น if สามารถคืนค่าให้ตัวแปรโดยตรง` | `if ใช้ควบคุมลำดับการทำงาน และไม่สามารถคืนค่าโดยตรง ต้องกำหนดค่าภายในแต่ละ Branch` |
+| Type System | `Static Type System มี Type Checking และ Type Inference ที่เข้มงวด` | `Static Type System แต่มี Implicit Conversion และการแปลง Type ที่ยืดหยุ่นกว่า` |
+| Memory Management | `ใช้ Ownership, Borrowing และ Lifetime เพื่อควบคุมการใช้ Memory` | `Programmer จัดการ Memory เอง เช่น malloc() และ free()` |
+| Safety | `Compiler ตรวจสอบ Type, Ownership และ Borrowing ช่วยป้องกัน Memory Error หลายประเภทตั้งแต่ Compile Time` | `Programmer ต้องรับผิดชอบ Memory Safety เอง จึงมีโอกาสเกิด Memory Leak, Dangling Pointer หรือ Use-after-free` |
+
+### Rust Example
+
+```rust
+fn main() {
+    let score = 75;
+
+    let grade = if score >= 80 {
+        "A"
+    } else if score >= 70 {
+        "B"
+    } else {
+        "C"
+    };
+
+    println!("{}", grade);
+}
+```
+Output:
+```rust
+B
+```
+จุดสำคัญคือ `if` สามารถเป็น Expression และคืนค่า `"B"` ให้กับตัวแปร `grade` ได้
+
+### `[C]` Example
+
+```c
+#include <stdio.h>
+
+int main() {
+    int score = 75;
+    char *grade;
+
+    if (score >= 80) {
+        grade = "A";
+    } else if (score >= 70) {
+        grade = "B";
+    } else {
+        grade = "C";
+    }
+
+    printf("%s\n", grade);
+
+    return 0;
+}
+```
+Output:
+```c
+B
+```
+ใน C `if` เป็น Statement จึงไม่ได้คืนค่าโดยตรง แต่ต้องกำหนดค่าให้ `grade` ภายในแต่ละ Branch
+
+### Analysis  
+
+Rust, Python, Java และ C มีแนวคิดเกี่ยวกับ Expression & Statements ที่แตกต่างกัน เนื่องจากถูกออกแบบโดยมีเป้าหมายของภาษาไม่เหมือนกัน
+- **Rust** เน้น Safety และ Performance โดยออกแบบให้ `if`, `match` และ Block สามารถเป็น Expression และคืนค่าได้โดยตรง เช่น `let x = if ... { ... } else { ... };` นอกจากนี้ยังใช้ Ownership และ Borrowing เพื่อให้ Compiler ตรวจสอบการจัดการ Memory ตั้งแต่ Compile Time
+  
+- **Python** เน้น ความอ่านง่ายและความสะดวกในการเขียนโปรแกรม จึงใช้ Indentation กำหนด Block และ `if` แบบปกติเป็น Statement หากต้องการ Expression ที่เลือกค่าจะใช้ Conditional Expression เช่น `x = "A" if score >= 80 else "B"` Python ใช้ Dynamic Typing และจัดการ Memory อัตโนมัติ
+
+- **Java** เน้น Object-Oriented Programming, Portability และความปลอดภัยในการจัดการ Memory โดย `if` แบบปกติเป็น Statement แต่มี Ternary Operator และ `switch expression` ที่สามารถคืนค่าได้ Java ใช้ Static Type System และ Garbage Collector ในการจัดการ Memory
+  
+- **C** เน้น Performance, การควบคุม Hardware และความใกล้ชิดกับระบบ จึงออกแบบ `if` และ `switch` เป็น Statement และให้ Programmer ควบคุม Memory ได้โดยตรงผ่าน Pointer, `malloc()` และ `free()` ข้อแลกเปลี่ยนคือ Programmer ต้องรับผิดชอบ Memory Safety เอง
+
+---
 ## 11. Teach Your Topic
 
 การนำเสนอมีสมาชิก **4 คน คนละประมาณ 5 นาที**
