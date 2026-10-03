@@ -1070,10 +1070,10 @@ Exercises + Common Mistakes + Challenge
 
 | Member | Issues | Commits | Pull Requests | Code Reviews | Contribution |
 |---|---:|---:|---:|---:|---|
-| Member 1 | `[จำนวน]` | `[จำนวน]` | `[จำนวน]` | `[จำนวน]` | `[รายละเอียด]` |
-| Member 2 | `[จำนวน]` | `[จำนวน]` | `[จำนวน]` | `[จำนวน]` | `[รายละเอียด]` |
-| Member 3 | `[จำนวน]` | `[จำนวน]` | `[จำนวน]` | `[จำนวน]` | `[รายละเอียด]` |
-| Member 4 | `[จำนวน]` | `[จำนวน]` | `[จำนวน]` | `[จำนวน]` | `[รายละเอียด]` |
+| Member 1 | `0` | `13` | `3` | `0` | `Concept + Short Code Illustration` |
+| Member 2 | `0` | `3` | `1` | `0` | `Detailed Code + Live Demo` |
+| Member 3 | `0` | `3` | `1` | `0` | `Rust vs Other Language + PPL Analysis` |
+| Member 4 | `0` | `8` | `2` | `0` | `Exercises + Common Mistakes + Challenge` |
 
 ### Teamwork Reflection
 
@@ -1115,7 +1115,7 @@ Exercises + Common Mistakes + Challenge
 
 **Repository:** `[[GitHub repository URL]](https://github.com/670710127/rust-tutorial-2569/tree/main)`
 
-**Chapter Path:** `rust-tutorial-2569/05-expressions-statements`
+**Chapter Path:** `05-expressions-statements/`
 
 **Final PR:** `#[PR number]`
 
