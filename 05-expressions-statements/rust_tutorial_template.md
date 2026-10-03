@@ -1073,7 +1073,7 @@ Exercises + Common Mistakes + Challenge
 | Member 1 | `0` | `20` | `3` | `0` | `Concept + Short Code Illustration` |
 | Member 2 | `0` | `3` | `1` | `0` | `Detailed Code + Live Demo` |
 | Member 3 | `0` | `3` | `1` | `0` | `Rust vs Other Language + PPL Analysis` |
-| Member 4 | `0` | `23` | `2` | `0` | `Exercises + Common Mistakes + Challenge` |
+| Member 4 | `0` | `26` | `2` | `0` | `Exercises + Common Mistakes + Challenge` |
 
 ### Teamwork Reflection
 
